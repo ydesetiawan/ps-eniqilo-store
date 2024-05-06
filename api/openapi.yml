@@ -1,0 +1,355 @@
+openapi: 3.0.0
+info:
+  title: Cats Social
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Development server
+paths:
+  /v1/user/register:
+    post:
+      tags:
+        - users
+      summary: Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: edy set
+                password: '123456'
+                email: edy99125@ad.com
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/user/login:
+    post:
+      tags:
+        - users
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                password: '123456'
+                email: edy9912@ad.com
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/cat:
+    post:
+      tags:
+        - cats
+      summary: Create Cat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Manis
+                race: Persian
+                sex: male
+                ageInMonth: 1
+                description: Persian
+                imageUrls:
+                  - http://example.com/
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkeTk5MTI1QGFkLmNvbSIsInVzZXJfaWQiOjEsIkNsYWltcyI6eyJleHAiOjE3MTQ2MzIwODd9fQ.UQUoOBXo5Oa2MV47DFUGdNnvuXewxReNkmjMp-I8gL4
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - cats
+      summary: Get Cat
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpc2FsQGJhbmFuYS5jb20iLCJ1c2VyX2lkIjoxMywiQ2xhaW1zIjp7ImV4cCI6MTcxNDg3NzM3Nn19.0kW0TdlQIPPW7gKfDauMKmTPjslyGiowjS--1_mRyO8
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '5'
+        - name: race
+          in: query
+          schema:
+            type: string
+          example: MaineCoon
+        - name: sex
+          in: query
+          schema:
+            type: string
+          example: male
+        - name: hasMatched
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+        - name: ageInMonth
+          in: query
+          schema:
+            type: string
+          example: ageInMonth=<4a
+        - name: owned
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+        - name: search
+          in: query
+          schema:
+            type: string
+          example: a
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          example: '4'
+        - name: id
+          in: query
+          schema:
+            type: integer
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/cat/{id}:
+    put:
+      tags:
+        - cats
+      summary: Update Cat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Manis Banget
+                race: Persian
+                sex: male
+                ageInMonth: 1
+                description: Persian
+                imageUrls:
+                  - http://example.com/
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkeTk5MTI1QGFkLmNvbSIsInVzZXJfaWQiOjEsIkNsYWltcyI6eyJleHAiOjE3MTQ2MzIwODd9fQ.UQUoOBXo5Oa2MV47DFUGdNnvuXewxReNkmjMp-I8gL4
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - cats
+      summary: Delete Cat
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkeTk5MTI1QGFkLmNvbSIsInVzZXJfaWQiOjEsIkNsYWltcyI6eyJleHAiOjE3MTQ2MzIwODd9fQ.UQUoOBXo5Oa2MV47DFUGdNnvuXewxReNkmjMp-I8gL4
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/cat/match:
+    get:
+      tags:
+        - cats
+      summary: Get Cat Match
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkeTk5MTI1NDQzQGFkLmNvbSIsInVzZXJfaWQiOjMsIkNsYWltcyI6eyJleHAiOjE3MTQ3MjgxMDR9fQ.hYNwFyU79lSmuG3Q74jGG0avKOtJG-6rfFxh5V1Cqo4
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - cats
+      summary: Cat Match
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                matchCatId: 1
+                userCatId: 3
+                message: ''
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkeTk5MTI1NDQzQGFkLmNvbSIsInVzZXJfaWQiOjMsIkNsYWltcyI6eyJleHAiOjE3MTQ3MjgxMDR9fQ.hYNwFyU79lSmuG3Q74jGG0avKOtJG-6rfFxh5V1Cqo4
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/cat/match/approve:
+    post:
+      tags:
+        - cats
+      summary: Approve Match Request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                matchId: 3
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkeTk5MTI1NDQzQGFkLmNvbSIsInVzZXJfaWQiOjMsIkNsYWltcyI6eyJleHAiOjE3MTQ3MjgxMDR9fQ.hYNwFyU79lSmuG3Q74jGG0avKOtJG-6rfFxh5V1Cqo4
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/cat/match/reject:
+    post:
+      tags:
+        - cats
+      summary: Reject Match Reques
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                matchId: 1
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkeTk5MTI1NDQzQGFkLmNvbSIsInVzZXJfaWQiOjMsIkNsYWltcyI6eyJleHAiOjE3MTQ3MjgxMDR9fQ.hYNwFyU79lSmuG3Q74jGG0avKOtJG-6rfFxh5V1Cqo4
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/cat/match/{id}:
+    delete:
+      tags:
+        - cats
+      summary: Delete Match Request
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkeTk5MTI1NDQzQGFkLmNvbSIsInVzZXJfaWQiOjMsIkNsYWltcyI6eyJleHAiOjE3MTQ3MjgxMDR9fQ.hYNwFyU79lSmuG3Q74jGG0avKOtJG-6rfFxh5V1Cqo4
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
