@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/alexliesenfeld/health"
-	healthcheckhandler "ps-cats-social/internal/healthcheck/handler"
+	healthcheckhandler "ps-eniqilo-store/internal/healthcheck/handler"
 )
 
 func (s *Server) setupRouter() {

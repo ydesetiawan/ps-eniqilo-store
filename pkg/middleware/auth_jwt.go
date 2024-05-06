@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"ps-cats-social/pkg/httphelper"
-	"ps-cats-social/pkg/httphelper/response"
+	"ps-eniqilo-store/pkg/httphelper"
+	"ps-eniqilo-store/pkg/httphelper/response"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"

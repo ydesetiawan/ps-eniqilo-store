@@ -3,7 +3,7 @@ package errs
 import (
 	"errors"
 	"net/http"
-	"ps-cats-social/pkg/httphelper/response"
+	"ps-eniqilo-store/pkg/httphelper/response"
 )
 
 func ErrorAdvisor(err error) response.WebResponse {

@@ -6,8 +6,8 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
-	"ps-cats-social/internal/shared"
-	bhandler "ps-cats-social/pkg/base/handler"
+	"ps-eniqilo-store/internal/shared"
+	bhandler "ps-eniqilo-store/pkg/base/handler"
 	"time"
 
 	"github.com/rs/cors"

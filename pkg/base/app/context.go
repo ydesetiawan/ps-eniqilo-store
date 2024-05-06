@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"golang.org/x/exp/slog"
 	"net/http"
-	"ps-cats-social/pkg/errs"
+	"ps-eniqilo-store/pkg/errs"
 	"strings"
 )
 

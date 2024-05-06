@@ -5,11 +5,11 @@ import (
 	"go/types"
 	"golang.org/x/exp/slog"
 	"net/http"
-	"ps-cats-social/pkg/base/app"
-	"ps-cats-social/pkg/errs"
-	"ps-cats-social/pkg/httphelper"
-	"ps-cats-social/pkg/httphelper/response"
-	"ps-cats-social/pkg/middleware"
+	"ps-eniqilo-store/pkg/base/app"
+	"ps-eniqilo-store/pkg/errs"
+	"ps-eniqilo-store/pkg/httphelper"
+	"ps-eniqilo-store/pkg/httphelper/response"
+	"ps-eniqilo-store/pkg/middleware"
 )
 
 type HandlerFn func(*app.Context) *response.WebResponse
