@@ -1,4 +1,4 @@
-module ps-cats-social
+module ps-eniqilo-store
 
 go 1.21.4
 
