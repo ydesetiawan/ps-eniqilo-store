@@ -3,7 +3,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"ps-cats-social/pkg/base/app"
+	"ps-eniqilo-store/pkg/base/app"
 )
 
 func ExtractUserId(ctx *app.Context) (int64, error) {

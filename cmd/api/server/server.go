@@ -6,8 +6,9 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
-	"ps-cats-social/internal/shared"
-	bhandler "ps-cats-social/pkg/base/handler"
+	producthandler "ps-eniqilo-store/internal/product/handler"
+	"ps-eniqilo-store/internal/shared"
+	bhandler "ps-eniqilo-store/pkg/base/handler"
 	"time"
 
 	"github.com/rs/cors"
@@ -16,19 +17,22 @@ import (
 )
 
 type Server struct {
-	baseHandler *bhandler.BaseHTTPHandler
-	router      *muxtrace.Router
-	port        int
+	baseHandler    *bhandler.BaseHTTPHandler
+	productHandler *producthandler.ProductHandler
+	router         *muxtrace.Router
+	port           int
 }
 
 func NewServer(
 	bHandler *bhandler.BaseHTTPHandler,
+	productHandler *producthandler.ProductHandler,
 	port int,
 ) Server {
 	return Server{
-		baseHandler: bHandler,
-		router:      muxtrace.NewRouter(muxtrace.WithServiceName(shared.ServiceName)),
-		port:        port,
+		baseHandler:    bHandler,
+		productHandler: productHandler,
+		router:         muxtrace.NewRouter(muxtrace.WithServiceName(shared.ServiceName)),
+		port:           port,
 	}
 }
 
@@ -83,5 +87,6 @@ func (s *Server) Run() error {
 		WriteTimeout: 60 * time.Second,
 		ReadTimeout:  60 * time.Second,
 	}
+
 	return srv.ListenAndServe()
 }
