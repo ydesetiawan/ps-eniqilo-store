@@ -6,5 +6,7 @@ import (
 )
 
 type ProductRepository interface {
+	GetProductByID(int64) (model.Product, error)
 	CreateProduct(*dto.ProductReq) (model.Product, error)
+	UpdateProduct(*dto.ProductReq, int64) (model.Product, error)
 }
