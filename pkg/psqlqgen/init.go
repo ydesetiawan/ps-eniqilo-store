@@ -2,6 +2,7 @@ package mysqlqgen
 
 import (
 	"fmt"
+	"ps-eniqilo-store/configs"
 	"time"
 
 	"github.com/lib/pq"
@@ -13,7 +14,7 @@ import (
 	sqlxtrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/jmoiron/sqlx"
 )
 
-func Init(host string, port string, uname string, pwd string, dbname string, dbparams string, servicename string) *sqlx.DB {
+func Init(dbConfig *configs.MainConfig, servicename string) *sqlx.DB {
 	defer func() {
 		if r := recover(); r != nil {
 			slog.Error("Errors")
@@ -25,7 +26,7 @@ func Init(host string, port string, uname string, pwd string, dbname string, dbp
 	sqltrace.Register("postgres", &pq.Driver{}, sqltrace.WithServiceName(servicename))
 
 	// Construct the connection string
-	dsnString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?%s", uname, pwd, host, port, dbname, dbparams)
+	dsnString := dbConfig.GetDsnString()
 
 	// Connect to PostgreSQL database with tracing
 	db, err := sqlxtrace.Connect("postgres", dsnString)
