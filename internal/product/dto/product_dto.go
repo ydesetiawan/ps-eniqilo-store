@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/go-playground/validator/v10"
+
 type ProductReq struct {
 	Name        string `json:"name" validate:"required,min=1,max=30"`
 	SKU         string `json:"sku" validate:"required,min=1,max=30"`
@@ -12,7 +14,12 @@ type ProductReq struct {
 	IsAvailable bool   `json:"isAvailable" validate:"required"`
 }
 
-type ProductRes struct {
+func ValidateProductReq(req ProductReq) error {
+	validate := validator.New()
+	return validate.Struct(req)
+}
+
+type ProductResp struct {
 	ID        string `json:"id"`
 	CreatedAt string `json:"createdAt"`
 }

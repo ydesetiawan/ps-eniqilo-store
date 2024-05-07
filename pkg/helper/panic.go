@@ -2,7 +2,7 @@ package helper
 
 import (
 	"golang.org/x/exp/slog"
-	"ps-cats-social/pkg/errs"
+	"ps-eniqilo-store/pkg/errs"
 )
 
 func PanicIfError(err error, msg string) {

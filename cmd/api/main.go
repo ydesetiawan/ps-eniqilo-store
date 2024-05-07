@@ -95,6 +95,7 @@ func runHttpCommand(cmd *cobra.Command, args []string) error {
 	httpServer := server.NewServer(
 		baseHandler, productHandler, port,
 	)
+
 	return httpServer.Run()
 }
 

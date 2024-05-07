@@ -87,5 +87,6 @@ func (s *Server) Run() error {
 		WriteTimeout: 60 * time.Second,
 		ReadTimeout:  60 * time.Second,
 	}
+
 	return srv.ListenAndServe()
 }
