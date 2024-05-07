@@ -9,8 +9,7 @@ CREATE TABLE products (
     stock INTEGER NOT NULL CHECK (stock >= 0 AND stock <= 100000),
     location VARCHAR(200) NOT NULL CHECK (length(location) > 0 AND length(location) <= 200),
     is_available BOOLEAN NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    is
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 -- Indexes for filtering and sorting
