@@ -72,3 +72,22 @@ func (h *ProductHandler) UpdateProduct(ctx *app.Context) *response.WebResponse {
 		Data:    result,
 	}
 }
+
+func (h *ProductHandler) DeleteProduct(ctx *app.Context) *response.WebResponse {
+	vars := mux.Vars(ctx.Request)
+	id, _ := vars["id"]
+	productId, _ := strconv.Atoi(id)
+
+	err := h.productService.DeleteProduct(int64(productId))
+	if err != nil {
+		return &response.WebResponse{
+			Status:  500,
+			Message: err.Error(),
+		}
+	}
+
+	return &response.WebResponse{
+		Status:  200,
+		Message: "successfully delete product",
+	}
+}
