@@ -5,6 +5,9 @@ import (
 	stdlog "log"
 	"os"
 	"ps-eniqilo-store/cmd/api/server"
+	producthandler "ps-eniqilo-store/internal/product/handler"
+	productrepository "ps-eniqilo-store/internal/product/repository"
+	productservice "ps-eniqilo-store/internal/product/service"
 	"ps-eniqilo-store/internal/shared"
 	bhandler "ps-eniqilo-store/pkg/base/handler"
 	"ps-eniqilo-store/pkg/logger"
@@ -27,8 +30,9 @@ var httpCmd = &cobra.Command{
 }
 
 var (
-	params      map[string]string
-	baseHandler *bhandler.BaseHTTPHandler
+	params         map[string]string
+	baseHandler    *bhandler.BaseHTTPHandler
+	productHandler *producthandler.ProductHandler
 )
 
 func init() {
@@ -89,7 +93,7 @@ func runHttpCommand(cmd *cobra.Command, args []string) error {
 	initInfra()
 
 	httpServer := server.NewServer(
-		baseHandler, port,
+		baseHandler, productHandler, port,
 	)
 	return httpServer.Run()
 }
@@ -108,6 +112,10 @@ func dbInitConnection() *sqlx.DB {
 }
 
 func initInfra() {
-	dbInitConnection()
+	db := dbInitConnection()
+
+	productRepository := productrepository.NewProductRepositoryImpl(db)
+	productService := productservice.NewProductServiceImpl(productRepository)
+	productHandler = producthandler.NewProductHandler(productService)
 
 }
