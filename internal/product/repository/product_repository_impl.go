@@ -18,7 +18,7 @@ func NewProductRepositoryImpl(db *sqlx.DB) ProductRepository {
 
 var (
 	queryGetProductByID = `
-    SELECT * FROM products WHERE id = $1
+    SELECT * FROM products WHERE deleted_at IS NULL and id = $1
 `
 )
 
@@ -114,4 +114,26 @@ func (r *productRepository) UpdateProduct(request *dto.ProductReq, productId int
 	savedProduct.ID = productId
 	savedProduct.CreatedAtFormatter = createdAt.Format(time.RFC3339)
 	return savedProduct, nil
+}
+
+var (
+	queryDeleteProduct = `
+    UPDATE products SET deleted_at = NOW()  WHERE id = $1
+`
+)
+
+func (r *productRepository) DeleteProduct(productId int64) error {
+	stmt, err := r.db.Prepare(queryDeleteProduct)
+	if err != nil {
+		return errs.NewErrInternalServerErrors("query execute error on [DeleteProduct] : ", err.Error())
+	}
+	defer stmt.Close()
+
+	// Execute the SQL statement to insert data
+	_, err = stmt.Query(productId)
+	if err != nil {
+		return errs.NewErrInternalServerErrors("query execute error on [DeleteProduct] : ", err.Error())
+	}
+
+	return nil
 }

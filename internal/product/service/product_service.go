@@ -10,6 +10,7 @@ import (
 type ProductService interface {
 	CreateProduct(*dto.ProductReq) (dto.ProductResp, error)
 	UpdateProduct(*dto.ProductReq, int64) (dto.ProductResp, error)
+	DeleteProduct(int64) error
 }
 
 type productService struct {
@@ -35,7 +36,7 @@ func (s *productService) CreateProduct(product *dto.ProductReq) (dto.ProductResp
 func (s *productService) UpdateProduct(request *dto.ProductReq, productId int64) (dto.ProductResp, error) {
 	_, err := s.productRepository.GetProductByID(productId)
 	if err != nil {
-		return dto.ProductResp{}, errs.NewErrDataNotFound("cat id is not found", productId, errs.ErrorData{})
+		return dto.ProductResp{}, errs.NewErrDataNotFound("product id is not found", productId, errs.ErrorData{})
 	}
 
 	savedProduct, err := s.productRepository.UpdateProduct(request, productId)
@@ -47,4 +48,18 @@ func (s *productService) UpdateProduct(request *dto.ProductReq, productId int64)
 		ID:        helper.IntToString(savedProduct.ID),
 		CreatedAt: savedProduct.CreatedAtFormatter,
 	}, nil
+}
+
+func (s *productService) DeleteProduct(productId int64) error {
+	_, err := s.productRepository.GetProductByID(productId)
+	if err != nil {
+		return errs.NewErrDataNotFound("product id is not found", productId, errs.ErrorData{})
+	}
+
+	err = s.productRepository.DeleteProduct(productId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

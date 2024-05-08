@@ -9,7 +9,8 @@ CREATE TABLE products (
     stock INTEGER NOT NULL CHECK (stock >= 0 AND stock <= 100000),
     location VARCHAR(200) NOT NULL CHECK (length(location) > 0 AND length(location) <= 200),
     is_available BOOLEAN NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    deleted_at TIMESTAMP NULL
 );
 
 -- Indexes for filtering and sorting
@@ -18,3 +19,4 @@ CREATE INDEX IF NOT EXISTS idx_sku ON products (sku);
 CREATE INDEX IF NOT EXISTS idx_category ON products (category);
 CREATE INDEX IF NOT EXISTS idx_price ON products (price);
 CREATE INDEX IF NOT EXISTS idx_created_at ON products (created_at);
+CREATE INDEX IF NOT EXISTS idx_deleted_at ON products (deleted_at);
