@@ -15,7 +15,7 @@ type ProductReq struct {
 	Price       int64  `json:"price" validate:"required,min=1"`
 	Stock       int    `json:"stock" validate:"required,min=0,max=100000"`
 	Location    string `json:"location" validate:"required,min=1,max=200"`
-	IsAvailable bool   `json:"isAvailable" validate:"required"`
+	IsAvailable bool   `json:"isAvailable" validate:"boolean"`
 }
 
 func ValidateProductReq(req ProductReq) error {
@@ -115,6 +115,54 @@ func GenerateProductReqParams(ctx *app.Context) map[string]interface{} {
 	reqCreatedAtOrderBy := ctx.Request.URL.Query().Get("createdAt")
 	if "" != reqCreatedAtOrderBy && isOrderValueValid(reqCreatedAtOrderBy) {
 		params["createdAt"] = reqCreatedAtOrderBy
+	}
+
+	return params
+}
+
+func GenerateSearchSKUReqParams(ctx *app.Context) map[string]interface{} {
+	params := make(map[string]interface{})
+
+	reqLimit, err := strconv.Atoi(ctx.Request.URL.Query().Get("limit"))
+	if err != nil {
+		reqLimit = 5
+	}
+	params["limit"] = reqLimit
+
+	reqOffset, err := strconv.Atoi(ctx.Request.URL.Query().Get("offset"))
+	if err != nil {
+		reqOffset = 0
+	}
+	params["offset"] = reqOffset
+
+	reqName := ctx.Request.URL.Query().Get("name")
+	if "" != reqName {
+		params["name"] = reqName
+	}
+
+	reqCategory := ctx.Request.URL.Query().Get("category")
+	if "" != reqCategory {
+		if isCategoryExists(reqCategory) {
+			params["category"] = reqCategory
+		}
+	}
+
+	params["isAvailable"] = true
+
+	reqSku := ctx.Request.URL.Query().Get("sku")
+	if "" != reqSku {
+		params["sku"] = reqSku
+	}
+
+	reqPriceOrderBy := ctx.Request.URL.Query().Get("price")
+	if "" != reqPriceOrderBy && isOrderValueValid(reqPriceOrderBy) {
+		params["price"] = reqPriceOrderBy
+	}
+
+	reqInStock := ctx.Request.URL.Query().Get("inStock")
+	inStock, err := strconv.ParseBool(reqInStock)
+	if err == nil {
+		params["inStock"] = inStock
 	}
 
 	return params
