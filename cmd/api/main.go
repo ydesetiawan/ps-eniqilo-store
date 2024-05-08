@@ -5,6 +5,7 @@ import (
 	stdlog "log"
 	"os"
 	"ps-eniqilo-store/cmd/api/server"
+	"ps-eniqilo-store/configs"
 	producthandler "ps-eniqilo-store/internal/product/handler"
 	productrepository "ps-eniqilo-store/internal/product/repository"
 	productservice "ps-eniqilo-store/internal/product/service"
@@ -15,7 +16,6 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 	"golang.org/x/exp/slog"
 )
@@ -100,16 +100,7 @@ func runHttpCommand(cmd *cobra.Command, args []string) error {
 }
 
 func dbInitConnection() *sqlx.DB {
-	godotenv.Load(".env")
-
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	uname := os.Getenv("DB_USERNAME")
-	pass := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
-	dbparams := os.Getenv("DB_PARAMS")
-
-	return psqlqgen.Init(host, port, uname, pass, dbname, dbparams, shared.ServiceName)
+	return psqlqgen.Init(configs.Init(), shared.ServiceName)
 }
 
 func initInfra() {
@@ -118,5 +109,4 @@ func initInfra() {
 	productRepository := productrepository.NewProductRepositoryImpl(db)
 	productService := productservice.NewProductServiceImpl(productRepository)
 	productHandler = producthandler.NewProductHandler(productService)
-
 }
