@@ -6,7 +6,8 @@ import (
 )
 
 type Product struct {
-	ID                 int64        `json:"id" db:"id"`
+	ID                 int64        `json:"-" db:"id"`
+	IDString           string       `json:"id" db:"-"`
 	Name               string       `json:"name" db:"name"`
 	SKU                string       `json:"sku" db:"sku"`
 	Category           string       `json:"category" db:"category"`
@@ -16,7 +17,7 @@ type Product struct {
 	Stock              int          `json:"stock" db:"stock"`
 	Location           string       `json:"location" db:"location"`
 	IsAvailable        bool         `json:"isAvailable" db:"is_available"`
-	CreatedAt          time.Time    `json:"createdAt" db:"created_at"`
-	CreatedAtFormatter string       `json:"-"`
+	CreatedAt          time.Time    `json:"-" db:"created_at"`
+	CreatedAtFormatter string       `json:"createdAt"`
 	DeletedAt          sql.NullTime `json:"-" db:"deleted_at"`
 }

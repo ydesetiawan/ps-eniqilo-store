@@ -11,6 +11,7 @@ func (s *Server) setupRouter() {
 
 	//TODO change to auth
 	v1.HandleFunc("/product", s.baseHandler.RunAction(s.productHandler.CreateProduct)).Methods("POST")
+	v1.HandleFunc("/product", s.baseHandler.RunAction(s.productHandler.GetProduct)).Methods("GET")
 	v1.HandleFunc("/product/{id:[1-9][0-9]*}", s.baseHandler.RunAction(s.productHandler.UpdateProduct)).Methods("PUT")
 	v1.HandleFunc("/product/{id:[1-9][0-9]*}", s.baseHandler.RunAction(s.productHandler.DeleteProduct)).Methods("DELETE")
 

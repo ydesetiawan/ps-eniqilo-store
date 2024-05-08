@@ -19,6 +19,24 @@ func NewProductHandler(productService service.ProductService) *ProductHandler {
 	return &ProductHandler{productService: productService}
 }
 
+func (h *ProductHandler) GetProduct(ctx *app.Context) *response.WebResponse {
+	reqParams := dto.GenerateProductReqParams(ctx)
+
+	results, err := h.productService.GetProducts(reqParams)
+	helper.PanicIfError(err, "error when [GetProduct")
+
+	message := "successfully get product"
+	if len(results) == 0 {
+		message = "DATA NOT FOUND"
+	}
+
+	return &response.WebResponse{
+		Status:  200,
+		Message: message,
+		Data:    results,
+	}
+}
+
 func (h *ProductHandler) CreateProduct(ctx *app.Context) *response.WebResponse {
 	var request dto.ProductReq
 	jsonString, _ := json.Marshal(ctx.GetJsonBody())
