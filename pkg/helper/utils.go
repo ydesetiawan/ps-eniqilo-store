@@ -100,6 +100,20 @@ func contains(slice []int64, val int64) bool {
 	return false
 }
 
+func IsOrderValueValid(val string) bool {
+	orders := []string{
+		"asc",
+		"desc",
+	}
+
+	for _, c := range orders {
+		if c == val {
+			return true
+		}
+	}
+	return false
+}
+
 func PlaceholdersString(n int) string {
 	placeholders := make([]string, n)
 	for i := range placeholders {

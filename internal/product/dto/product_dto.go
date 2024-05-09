@@ -3,6 +3,7 @@ package dto
 import (
 	"github.com/go-playground/validator/v10"
 	"ps-eniqilo-store/pkg/base/app"
+	"ps-eniqilo-store/pkg/helper"
 	"strconv"
 )
 
@@ -37,20 +38,6 @@ func isCategoryExists(val string) bool {
 	}
 
 	for _, c := range categories {
-		if c == val {
-			return true
-		}
-	}
-	return false
-}
-
-func isOrderValueValid(val string) bool {
-	orders := []string{
-		"asc",
-		"desc",
-	}
-
-	for _, c := range orders {
 		if c == val {
 			return true
 		}
@@ -102,7 +89,7 @@ func GenerateProductReqParams(ctx *app.Context) map[string]interface{} {
 	}
 
 	reqPriceOrderBy := ctx.Request.URL.Query().Get("price")
-	if "" != reqPriceOrderBy && isOrderValueValid(reqPriceOrderBy) {
+	if "" != reqPriceOrderBy && helper.IsOrderValueValid(reqPriceOrderBy) {
 		params["price"] = reqPriceOrderBy
 	}
 
@@ -113,7 +100,7 @@ func GenerateProductReqParams(ctx *app.Context) map[string]interface{} {
 	}
 
 	reqCreatedAtOrderBy := ctx.Request.URL.Query().Get("createdAt")
-	if "" != reqCreatedAtOrderBy && isOrderValueValid(reqCreatedAtOrderBy) {
+	if "" != reqCreatedAtOrderBy && helper.IsOrderValueValid(reqCreatedAtOrderBy) {
 		params["createdAt"] = reqCreatedAtOrderBy
 	}
 
@@ -155,7 +142,7 @@ func GenerateSearchSKUReqParams(ctx *app.Context) map[string]interface{} {
 	}
 
 	reqPriceOrderBy := ctx.Request.URL.Query().Get("price")
-	if "" != reqPriceOrderBy && isOrderValueValid(reqPriceOrderBy) {
+	if "" != reqPriceOrderBy && helper.IsOrderValueValid(reqPriceOrderBy) {
 		params["price"] = reqPriceOrderBy
 	}
 
