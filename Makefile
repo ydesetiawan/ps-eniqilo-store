@@ -1,5 +1,8 @@
 include .env
 
+run:
+	go run cmd/api/main.go http -p 3000
+
 build:
 	GOARCH=amd64 GOOS=linux go build -o main_ydesetiawan94 cmd/api/main.go
 
@@ -7,7 +10,7 @@ deploy:
 	scp -i w1key main_ydesetiawan94 ubuntu@52.221.209.87:~
 
 migration_setup:
-	psql -U postgres -c "CREATE DATABASE cats_social;"
+	psql -U ${DB_USERNAME} -c "CREATE DATABASE ${DB_NAME};"
 
 migration_up:
 	migrate -path db/migrations/ -database "postgresql://${DB_USERNAME}:@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable" -verbose up
