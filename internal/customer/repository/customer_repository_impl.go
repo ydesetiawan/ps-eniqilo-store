@@ -100,7 +100,7 @@ func (r *customerRepository) SearchCustomers(params map[string]interface{}) ([]m
 
 	if name, ok := params["name"]; ok {
 		query += " AND LIKE $" + fmt.Sprintf("%d", len(args)+1)
-    nameStr := fmt.Sprintf("%%%s%%", name)
+		nameStr := fmt.Sprintf("%%%s%%", name)
 		args = append(args, nameStr)
 	} else if phoneNumber, ok := params["phoneNumber"]; ok {
 		query += " AND phone_number LIKE $" + fmt.Sprintf("%d", len(args)+1)
@@ -117,7 +117,7 @@ func (r *customerRepository) SearchCustomers(params map[string]interface{}) ([]m
 	var customers []model.Customer
 	for rows.Next() {
 		var customer model.Customer
-		err := rows.Scan(&customer.ID, &customer.Name, &customer.PhoneNumber)
+		err := rows.Scan(&customer.ID, &customer.Name, &customer.PhoneNumber, &customer.CreatedAt)
 		if err != nil {
 			return nil, errs.NewErrInternalServerErrors("execute query error [GetCustomer]: ", err.Error())
 		}

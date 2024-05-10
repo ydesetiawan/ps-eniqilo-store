@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/jmoiron/sqlx"
 	"ps-eniqilo-store/internal/product/dto"
 	"ps-eniqilo-store/internal/product/model"
 	"ps-eniqilo-store/pkg/errs"
@@ -9,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type productRepository struct {
@@ -240,4 +241,55 @@ func (r *productRepository) DeleteProduct(productId int64) error {
 	}
 
 	return nil
+}
+
+func (r *productRepository) GetProductByIDs(ids []int64) ([]model.Product, error) {
+	query, args, err := sqlx.In("SELECT * FROM products WHERE id IN (?)", ids)
+	if err != nil {
+		return nil, err
+	}
+
+	query = r.db.Rebind(query)
+
+	rows, err := r.db.Queryx(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var products []model.Product
+
+	for rows.Next() {
+		var product model.Product
+		if err := rows.StructScan(&product); err != nil {
+			return nil, err
+		}
+		products = append(products, product)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return products, nil
+}
+
+var decreaseStock = `UPDATE products SET stock = stock - $1 WHERE id = $2`
+
+func (r *productRepository) DecreaseStock(tx *sqlx.Tx, productId int64, stock int) (err error) {
+	var (
+		rows *sqlx.Rows
+	)
+	if tx != nil {
+		rows, err = tx.Queryx(decreaseStock, stock, productId)
+	} else {
+		rows, err = r.db.Queryx(decreaseStock, stock, productId)
+	}
+
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	return
 }

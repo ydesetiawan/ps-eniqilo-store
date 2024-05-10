@@ -6,6 +6,13 @@ import (
 	"strconv"
 )
 
+type ProductCheckoutReq struct {
+	CustomerId     string          `json:"customerId" validate:"required"`
+	ProductDetails []ProductDetail `json:"productDetails" validate:"required,dive"`
+	Paid           float64         `json:"paid" validate:"required,min=1"`
+	Change         *float64        `json:"change" validate:"min=0"`
+}
+
 type CheckOutHistoryResp struct {
 	TransactionId  string          `json:"transaction_id"`
 	CustomerId     string          `json:"customer_id"`
@@ -16,8 +23,8 @@ type CheckOutHistoryResp struct {
 }
 
 type ProductDetail struct {
-	ProductID string `json:"productId"`
-	Quantity  int    `json:"quantity"`
+	ProductID string `json:"productId" validate:"required"`
+	Quantity  int    `json:"quantity" validate:"required,min=1"`
 }
 
 func GenerateCheckoutHistoryReqParams(ctx *app.Context) map[string]interface{} {

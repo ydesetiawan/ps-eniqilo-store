@@ -2,12 +2,14 @@ package repository
 
 import (
 	"encoding/json"
-	"github.com/jmoiron/sqlx"
 	"ps-eniqilo-store/internal/checkout/dto"
+	"ps-eniqilo-store/internal/checkout/model"
 	"ps-eniqilo-store/pkg/errs"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type checkoutRepository struct {
@@ -119,4 +121,27 @@ func (c checkoutRepository) GetCheckoutHistory(params map[string]interface{}) ([
 	}
 	return histories, nil
 
+}
+
+const createCheckoutQuery = "INSERT INTO checkouts (customer_id, total_price, paid, change) VALUES ($1, $2, $3, $4) RETURNING id"
+
+func (c checkoutRepository) CreateCheckout(tx *sqlx.Tx, checkout *model.Checkout) (checkoutId int64, err error) {
+	if tx != nil {
+		err = tx.QueryRowx(createCheckoutQuery, checkout.CustomerID, checkout.TotalPrice, checkout.Paid, checkout.Change).Scan(&checkoutId)
+	} else {
+		err = c.db.QueryRowx(createCheckoutQuery, checkout.CustomerID, checkout.TotalPrice, checkout.Paid, checkout.Change).Scan(&checkoutId)
+	}
+
+	return
+}
+
+const createCheckoutDetailQuery = "INSERT INTO checkout_details (checkout_id, product_id, product_price, total_price, quantity) VALUES ($1, $2, $3, $4, $5)"
+
+func (c checkoutRepository) CreateCheckoutDetail(tx *sqlx.Tx, detail *model.CheckoutDetail) (err error) {
+	if tx != nil {
+		_, err = tx.Exec(createCheckoutDetailQuery, detail.CheckoutID, detail.ProductID, detail.ProductPrice, detail.TotalPrice, detail.Quantity)
+	} else {
+		_, err = c.db.Exec(createCheckoutDetailQuery, detail.CheckoutID, detail.ProductID, detail.ProductPrice, detail.TotalPrice, detail.Quantity)
+	}
+	return
 }

@@ -21,6 +21,7 @@ func (s *Server) setupRouter() {
 	v1.HandleFunc("/product/{id:[1-9][0-9]*}", s.baseHandler.RunActionAuth(s.productHandler.UpdateProduct)).Methods("PUT")
 	v1.HandleFunc("/product/{id:[1-9][0-9]*}", s.baseHandler.RunActionAuth(s.productHandler.DeleteProduct)).Methods("DELETE")
 	v1.HandleFunc("/product/customer", s.baseHandler.RunActionAuth(s.productHandler.SearchSKU)).Methods("GET")
+	v1.HandleFunc("/product/checkout", s.baseHandler.RunActionAuth(s.checkoutHandler.CheckoutProduct)).Methods("POST")
 	v1.HandleFunc("/product/checkout/history", s.baseHandler.RunActionAuth(s.checkoutHandler.GetCheckoutHistory)).Methods("GET")
 
 }
