@@ -16,13 +16,13 @@ func NewCheckoutHandler(checkoutService service.CheckoutService) *CheckoutHandle
 	return &CheckoutHandler{checkoutService: checkoutService}
 }
 
-func (h *CheckoutHandler) GetProduct(ctx *app.Context) *response.WebResponse {
+func (h *CheckoutHandler) GetCheckoutHistory(ctx *app.Context) *response.WebResponse {
 	reqParams := dto.GenerateCheckoutHistoryReqParams(ctx)
 
 	results, err := h.checkoutService.GetCheckOutHistory(reqParams)
-	helper.PanicIfError(err, "error when [GetProduct")
+	helper.PanicIfError(err, "error when [GetCheckoutHistory")
 
-	message := "successfully get product"
+	message := "successfully get checkout history"
 	if len(results) == 0 {
 		message = "DATA NOT FOUND"
 	}
