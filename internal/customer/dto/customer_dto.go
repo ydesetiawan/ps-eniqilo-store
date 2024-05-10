@@ -2,22 +2,28 @@ package dto
 
 import (
 	"ps-eniqilo-store/pkg/base/app"
+	"regexp"
 
 	"github.com/go-playground/validator/v10"
 )
 
 type CustomerReq struct {
 	Name        string `json:"name" validate:"required,min=1,max=50"`
-	PhoneNumber string `json:"phoneNumber" validate:"required,min=1,max=30,unique_phone_number"`
+	PhoneNumber string `json:"phoneNumber" validate:"required,min=1,max=30,phonenumber"`
 }
 
 func ValidateCustomerReq(req CustomerReq) error {
 	validate := validator.New()
-	validate.RegisterValidation("unique_phone_number", func(fl validator.FieldLevel) bool {
-		return true
-	})
+  
+  validate.RegisterValidation("phonenumber", func(fl validator.FieldLevel) bool {
+    phone := fl.Field().String()
+    regex := `^(\+|\d)[\d-]*$`
+    match, _ := regexp.MatchString(regex, phone)
 
-	return validate.Struct(req)
+    return match
+  })
+
+  return validate.Struct(req)
 }
 
 type CustomerResp struct {

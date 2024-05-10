@@ -99,17 +99,14 @@ func (r *customerRepository) SearchCustomers(params map[string]interface{}) ([]m
 	args := []interface{}{}
 
 	if name, ok := params["name"]; ok {
-		query += " AND name = $" + fmt.Sprintf("%d", len(args)+1)
-		args = append(args, name)
+		query += " AND LIKE $" + fmt.Sprintf("%d", len(args)+1)
+    nameStr := fmt.Sprintf("%%%s%%", name)
+		args = append(args, nameStr)
 	} else if phoneNumber, ok := params["phoneNumber"]; ok {
 		query += " AND phone_number LIKE $" + fmt.Sprintf("%d", len(args)+1)
 		phoneNumberStr := fmt.Sprintf("%s%%", phoneNumber)
 		args = append(args, phoneNumberStr)
 	}
-
-	// Log the query and arguments
-	fmt.Printf("Executing query: %s\n", query)
-	fmt.Printf("Query arguments: %v\n", args)
 
 	rows, err := r.db.Query(query, args...)
 	if err != nil {

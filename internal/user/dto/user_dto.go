@@ -3,7 +3,7 @@ package dto
 import "github.com/go-playground/validator/v10"
 
 type LoginReq struct {
-	PhoneNumber string `json:"phone_number" validate:"required"`
+	PhoneNumber string `json:"phoneNumber" validate:"required"`
 	Password    string `json:"password" validate:"required,min=5,max=15"`
 }
 
@@ -13,7 +13,7 @@ func ValidateLoginReq(loginReq LoginReq) error {
 }
 
 type RegisterReq struct {
-	PhoneNumber string `json:"phone_number" validate:"required,max=30"`
+	PhoneNumber string `json:"phoneNumber" validate:"required,max=30,e164"`
 	Password    string `json:"password" validate:"required,min=5,max=15"`
 	Name        string `json:"name" validate:"required,min=5,max=50"`
 }
@@ -25,6 +25,6 @@ func ValidateRegisterReq(req RegisterReq) error {
 
 type RegisterResp struct {
 	Name        string `json:"name"`
-	PhoneNumber string `json:"phone_number"`
+	PhoneNumber string `json:"phoneNumber"`
 	AccessToken string `json:"accessToken"`
 }

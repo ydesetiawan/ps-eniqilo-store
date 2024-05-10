@@ -1,7 +1,7 @@
 include .env
 
 run:
-	go run cmd/api/main.go http -p 3000
+	go run cmd/api/main.go http
 
 build:
 	GOARCH=amd64 GOOS=linux go build -o main_ydesetiawan94 cmd/api/main.go
