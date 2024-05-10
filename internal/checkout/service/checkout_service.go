@@ -17,7 +17,6 @@ func NewCheckoutServiceImpl(checkoutRepository repository.CheckoutRepository) Ch
 	return &checkoutService{checkoutRepository: checkoutRepository}
 }
 
-func (c checkoutService) GetCheckOutHistory(map[string]interface{}) ([]dto.CheckOutHistoryResp, error) {
-	//TODO implement me
-	panic("implement me")
+func (c checkoutService) GetCheckOutHistory(request map[string]interface{}) ([]dto.CheckOutHistoryResp, error) {
+	return c.checkoutRepository.GetCheckoutHistory(request)
 }

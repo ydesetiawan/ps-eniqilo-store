@@ -1,18 +1,23 @@
 package dto
 
 import (
-	"ps-eniqilo-store/internal/checkout/model"
 	"ps-eniqilo-store/pkg/base/app"
 	"ps-eniqilo-store/pkg/helper"
 	"strconv"
 )
 
 type CheckOutHistoryResp struct {
-	TransactionId  string                 `json:"transaction_id"`
-	CustomerId     string                 `json:"customer_id"`
-	ProductDetails []model.CheckoutDetail `json:"productDetails"`
-	Paid           float64                `json:"paid"`
-	Change         float64                `json:"change"`
+	TransactionId  string          `json:"transaction_id"`
+	CustomerId     string          `json:"customer_id"`
+	ProductDetails []ProductDetail `json:"productDetails"`
+	Paid           float64         `json:"paid"`
+	Change         float64         `json:"change"`
+	CreatedAt      string          `json:"createdAt"`
+}
+
+type ProductDetail struct {
+	ProductID string `json:"productId"`
+	Quantity  int    `json:"quantity"`
 }
 
 func GenerateCheckoutHistoryReqParams(ctx *app.Context) map[string]interface{} {
