@@ -141,6 +141,6 @@ func initInfra() {
 	productHandler = producthandler.NewProductHandler(productService)
 
 	checkoutRepository := checkoutrepository.NewCheckoutRepositoryImpl(db)
-	checkoutService := checkoutservice.NewCheckoutServiceImpl(checkoutRepository)
+	checkoutService := checkoutservice.NewCheckoutServiceImpl(checkoutRepository, productRepository, customerRepository, db)
 	checkoutHandler = checkouthandler.NewCheckoutHandler(checkoutService)
 }

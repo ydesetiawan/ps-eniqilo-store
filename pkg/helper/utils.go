@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/go-playground/validator/v10"
 )
 
 func ConvertSliceToPostgresArray(slice []string) string {
@@ -120,4 +122,9 @@ func PlaceholdersString(n int) string {
 		placeholders[i] = "$" + strconv.Itoa(i+1) + ""
 	}
 	return strings.Join(placeholders, ", ")
+}
+
+func ValidateStruct(req interface{}) error {
+	validate := validator.New()
+	return validate.Struct(req)
 }
