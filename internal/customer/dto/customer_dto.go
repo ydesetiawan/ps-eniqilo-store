@@ -8,16 +8,12 @@ import (
 
 type CustomerReq struct {
 	Name        string `json:"name" validate:"required,min=1,max=50"`
-	PhoneNumber string `json:"phoneNumber" validate:"required,min=1,max=30,unique_phone_number"`
+	PhoneNumber string `json:"phoneNumber" validate:"required,min=1,max=30,e164"`
 }
 
 func ValidateCustomerReq(req CustomerReq) error {
 	validate := validator.New()
-	validate.RegisterValidation("unique_phone_number", func(fl validator.FieldLevel) bool {
-		return true
-	})
-
-	return validate.Struct(req)
+  return validate.Struct(req)
 }
 
 type CustomerResp struct {
