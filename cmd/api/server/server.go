@@ -6,6 +6,7 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
+	checkouthandler "ps-eniqilo-store/internal/checkout/handler"
 	customerhandler "ps-eniqilo-store/internal/customer/handler"
 	producthandler "ps-eniqilo-store/internal/product/handler"
 	"ps-eniqilo-store/internal/shared"
@@ -21,6 +22,7 @@ type Server struct {
 	baseHandler     *bhandler.BaseHTTPHandler
 	customerHandler *customerhandler.CustomerHandler
 	productHandler  *producthandler.ProductHandler
+	checkoutHandler *checkouthandler.CheckoutHandler
 	router          *muxtrace.Router
 	port            int
 }
@@ -29,12 +31,14 @@ func NewServer(
 	bHandler *bhandler.BaseHTTPHandler,
 	customerHandler *customerhandler.CustomerHandler,
 	productHandler *producthandler.ProductHandler,
+	checkoutHandler *checkouthandler.CheckoutHandler,
 	port int,
 ) Server {
 	return Server{
 		baseHandler:     bHandler,
 		customerHandler: customerHandler,
 		productHandler:  productHandler,
+		checkoutHandler: checkoutHandler,
 		router:          muxtrace.NewRouter(muxtrace.WithServiceName(shared.ServiceName)),
 		port:            port,
 	}

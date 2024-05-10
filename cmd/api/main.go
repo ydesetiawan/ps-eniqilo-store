@@ -10,9 +10,14 @@ import (
 	customerrepository "ps-eniqilo-store/internal/customer/repository"
 	customerservice "ps-eniqilo-store/internal/customer/service"
 
+	checkouthandler "ps-eniqilo-store/internal/checkout/handler"
+	checkoutrepository "ps-eniqilo-store/internal/checkout/repository"
+	checkoutservice "ps-eniqilo-store/internal/checkout/service"
+
 	producthandler "ps-eniqilo-store/internal/product/handler"
 	productrepository "ps-eniqilo-store/internal/product/repository"
 	productservice "ps-eniqilo-store/internal/product/service"
+
 	"ps-eniqilo-store/internal/shared"
 	bhandler "ps-eniqilo-store/pkg/base/handler"
 	"ps-eniqilo-store/pkg/logger"
@@ -38,6 +43,7 @@ var (
 	baseHandler     *bhandler.BaseHTTPHandler
 	customerHandler *customerhandler.CustomerHandler
 	productHandler  *producthandler.ProductHandler
+	checkoutHandler *checkouthandler.CheckoutHandler
 )
 
 func init() {
@@ -98,7 +104,7 @@ func runHttpCommand(cmd *cobra.Command, args []string) error {
 	initInfra()
 
 	httpServer := server.NewServer(
-		baseHandler, customerHandler, productHandler, port,
+		baseHandler, customerHandler, productHandler, checkoutHandler, port,
 	)
 
 	return httpServer.Run()
@@ -118,4 +124,9 @@ func initInfra() {
 	productRepository := productrepository.NewProductRepositoryImpl(db)
 	productService := productservice.NewProductServiceImpl(productRepository)
 	productHandler = producthandler.NewProductHandler(productService)
+
+	checkoutRepository := checkoutrepository.NewCheckoutRepositoryImpl(db)
+	checkoutService := checkoutservice.NewCheckoutServiceImpl(checkoutRepository)
+	checkoutHandler = checkouthandler.NewCheckoutHandler(checkoutService)
+
 }

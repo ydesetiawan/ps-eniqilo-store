@@ -5,6 +5,9 @@ import (
 	"ps-eniqilo-store/internal/product/dto"
 	"ps-eniqilo-store/internal/product/model"
 	"ps-eniqilo-store/pkg/errs"
+	"ps-eniqilo-store/pkg/helper"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -67,6 +70,107 @@ func (r *productRepository) CreateProduct(request *dto.ProductReq) (model.Produc
 	savedProduct.ID = id
 	savedProduct.CreatedAtFormatter = createdAt.Format(time.RFC3339)
 	return savedProduct, nil
+}
+
+func generateQueryGetProducts(params map[string]interface{}) (string, []interface{}) {
+	query := "SELECT * FROM products WHERE deleted_at IS NULL and 1=1"
+	var orderByParts []string
+	isOrder := false
+
+	var args []interface{}
+	num := 1
+	limit := 5
+	offset := 0
+	for key, value := range params {
+		isAddArgs := false
+		switch key {
+		case "id":
+			query += " AND id = $" + strconv.Itoa(num)
+			isAddArgs = true
+			num++
+		case "name":
+			query += " AND name LIKE '%' || $" + strconv.Itoa(num) + " || '%'"
+			isAddArgs = true
+			num++
+		case "category":
+			query += " AND category = $" + strconv.Itoa(num)
+			isAddArgs = true
+			num++
+		case "isAvailable":
+			query += " AND is_available = $" + strconv.Itoa(num)
+			isAddArgs = true
+			num++
+		case "sku":
+			query += " AND sku = $" + strconv.Itoa(num)
+			isAddArgs = true
+			num++
+		case "inStock":
+			if value.(bool) {
+				query += " AND stock > 0"
+			} else {
+				query += " AND stock = 0"
+			}
+		case "price":
+			orderByParts = append(orderByParts, " price "+value.(string))
+			isOrder = true
+		case "createdAt":
+			orderByParts = append(orderByParts, " created_at "+value.(string))
+			isOrder = true
+		case "limit":
+			limit = value.(int)
+		case "offset":
+			offset = value.(int)
+		}
+		if isAddArgs {
+			args = append(args, value)
+		}
+	}
+
+	if isOrder {
+		query += " ORDER BY " + strings.Join(orderByParts, ", ")
+	}
+	query += " LIMIT $" + strconv.Itoa(num) + " OFFSET $" + strconv.Itoa(num+1)
+	args = append(args, limit)
+	args = append(args, offset)
+	return query, args
+}
+
+func (r *productRepository) GetProducts(params map[string]interface{}) ([]model.Product, error) {
+	query, args := generateQueryGetProducts(params)
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var products []model.Product
+	for rows.Next() {
+		var product model.Product
+		err := rows.Scan(
+			&product.ID,
+			&product.Name,
+			&product.SKU,
+			&product.Category,
+			&product.ImageURL,
+			&product.Notes,
+			&product.Price,
+			&product.Stock,
+			&product.Location,
+			&product.IsAvailable,
+			&product.CreatedAt,
+			&product.DeletedAt)
+		if err != nil {
+			return nil, errs.NewErrInternalServerErrors("execute query error [GetProducts]: ", err.Error())
+		}
+		product.IDString = helper.IntToString(product.ID)
+		product.CreatedAtFormatter = product.CreatedAt.Format(time.RFC3339)
+		products = append(products, product)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, errs.NewErrInternalServerErrors("execute query error [GetProducts]: ", err.Error())
+	}
+
+	return products, nil
 }
 
 var (
