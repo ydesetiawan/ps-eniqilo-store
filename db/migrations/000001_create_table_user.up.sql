@@ -6,5 +6,5 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_user_name ON customers (name);
-CREATE INDEX IF NOT EXISTS idx_user_phone_number ON customers (phone_number);
+CREATE INDEX IF NOT EXISTS idx_user_name ON users (name);
+CREATE INDEX IF NOT EXISTS idx_user_phone_number ON users (phone_number);
