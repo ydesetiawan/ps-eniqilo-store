@@ -1,8 +1,9 @@
 package server
 
 import (
-	"github.com/alexliesenfeld/health"
 	healthcheckhandler "ps-eniqilo-store/internal/healthcheck/handler"
+
+	"github.com/alexliesenfeld/health"
 )
 
 func (s *Server) setupRouter() {
@@ -10,6 +11,9 @@ func (s *Server) setupRouter() {
 	v1.HandleFunc("/health", health.NewHandler(healthcheckhandler.HealthCheck())).Methods("GET")
 
 	//TODO change to auth
+	v1.HandleFunc("/customer/register", s.baseHandler.RunAction(s.customerHandler.CreateCustomer)).Methods("POST")
+	v1.HandleFunc("/customer", s.baseHandler.RunAction(s.customerHandler.GetCustomers)).Methods("GET")
+
 	v1.HandleFunc("/product", s.baseHandler.RunAction(s.productHandler.CreateProduct)).Methods("POST")
 	v1.HandleFunc("/product/{id:[1-9][0-9]*}", s.baseHandler.RunAction(s.productHandler.UpdateProduct)).Methods("PUT")
 	v1.HandleFunc("/product/{id:[1-9][0-9]*}", s.baseHandler.RunAction(s.productHandler.DeleteProduct)).Methods("DELETE")
