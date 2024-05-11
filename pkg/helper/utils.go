@@ -2,6 +2,7 @@ package helper
 
 import (
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -127,4 +128,9 @@ func PlaceholdersString(n int) string {
 func ValidateStruct(req interface{}) error {
 	validate := validator.New()
 	return validate.Struct(req)
+}
+
+func IdIsInteger(id string) bool {
+	var idPattern = regexp.MustCompile(`^[0-9]+$`)
+	return idPattern.MatchString(id)
 }

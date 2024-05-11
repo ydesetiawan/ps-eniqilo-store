@@ -2,13 +2,14 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"ps-eniqilo-store/internal/product/dto"
 	"ps-eniqilo-store/internal/product/service"
 	"ps-eniqilo-store/pkg/base/app"
 	"ps-eniqilo-store/pkg/helper"
 	"ps-eniqilo-store/pkg/httphelper/response"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 type ProductHandler struct {
@@ -81,7 +82,15 @@ func (h *ProductHandler) CreateProduct(ctx *app.Context) *response.WebResponse {
 
 func (h *ProductHandler) UpdateProduct(ctx *app.Context) *response.WebResponse {
 	vars := mux.Vars(ctx.Request)
-	id, _ := vars["id"]
+	id := vars["id"]
+	if !helper.IdIsInteger(id) {
+		return &response.WebResponse{
+			Status:  404,
+			Message: "product id is invalid",
+			Data:    nil,
+		}
+	}
+
 	productId, _ := strconv.Atoi(id)
 
 	var request dto.ProductReq
@@ -110,7 +119,15 @@ func (h *ProductHandler) UpdateProduct(ctx *app.Context) *response.WebResponse {
 
 func (h *ProductHandler) DeleteProduct(ctx *app.Context) *response.WebResponse {
 	vars := mux.Vars(ctx.Request)
-	id, _ := vars["id"]
+	id := vars["id"]
+	if !helper.IdIsInteger(id) {
+		return &response.WebResponse{
+			Status:  404,
+			Message: "product id is invalid",
+			Data:    nil,
+		}
+	}
+
 	productId, _ := strconv.Atoi(id)
 
 	err := h.productService.DeleteProduct(int64(productId))
