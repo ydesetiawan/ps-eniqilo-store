@@ -95,16 +95,18 @@ func (r *customerRepository) CreateCustomer(request *dto.CustomerReq) (model.Cus
 }
 
 func (r *customerRepository) SearchCustomers(params map[string]interface{}) ([]model.Customer, error) {
-	query := "SELECT * FROM customers WHERE 1=1"
+	query := "SELECT id, name, phone_number FROM customers WHERE 1=1"
 	args := []interface{}{}
 
 	if name, ok := params["name"]; ok {
-		query += " AND LIKE $" + fmt.Sprintf("%d", len(args)+1)
+		query += " AND name LIKE $" + fmt.Sprintf("%d", len(args)+1)
 		nameStr := fmt.Sprintf("%%%s%%", name)
 		args = append(args, nameStr)
-	} else if phoneNumber, ok := params["phoneNumber"]; ok {
+	}
+  
+  if phoneNumber, ok := params["phoneNumber"]; ok {
 		query += " AND phone_number LIKE $" + fmt.Sprintf("%d", len(args)+1)
-		phoneNumberStr := fmt.Sprintf("%s%%", phoneNumber)
+		phoneNumberStr := fmt.Sprintf("%%%s%%", phoneNumber)
 		args = append(args, phoneNumberStr)
 	}
 
@@ -117,7 +119,7 @@ func (r *customerRepository) SearchCustomers(params map[string]interface{}) ([]m
 	var customers []model.Customer
 	for rows.Next() {
 		var customer model.Customer
-		err := rows.Scan(&customer.ID, &customer.Name, &customer.PhoneNumber, &customer.CreatedAt)
+		err := rows.Scan(&customer.ID, &customer.Name, &customer.PhoneNumber)
 		if err != nil {
 			return nil, errs.NewErrInternalServerErrors("execute query error [GetCustomer]: ", err.Error())
 		}
