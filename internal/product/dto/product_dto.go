@@ -1,10 +1,11 @@
 package dto
 
 import (
-	"github.com/go-playground/validator/v10"
 	"ps-eniqilo-store/pkg/base/app"
 	"ps-eniqilo-store/pkg/helper"
 	"strconv"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type ProductReq struct {
@@ -16,7 +17,7 @@ type ProductReq struct {
 	Price       int64  `json:"price" validate:"required,min=1"`
 	Stock       int    `json:"stock" validate:"required,min=0,max=100000"`
 	Location    string `json:"location" validate:"required,min=1,max=200"`
-	IsAvailable bool   `json:"isAvailable" validate:"required,boolean"`
+	IsAvailable bool   `json:"isAvailable" validate:"boolean"`
 }
 
 func ValidateProductReq(req ProductReq) error {
