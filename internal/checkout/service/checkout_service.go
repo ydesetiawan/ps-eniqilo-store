@@ -113,7 +113,7 @@ func (c *checkoutService) ProductCheckout(ctx context.Context, request *dto.Prod
 	return
 }
 
-func (c *checkoutService) getProductDetails(request *dto.ProductCheckoutReq) (map[int64]*productmodel.Product, error) {
+func (c *checkoutService) getProductDetails(request *dto.ProductCheckoutReq) (map[int64]productmodel.Product, error) {
 	productIds, err := getUniqueProductIds(request.ProductDetails)
 	if err != nil {
 		return nil, err
@@ -124,15 +124,15 @@ func (c *checkoutService) getProductDetails(request *dto.ProductCheckoutReq) (ma
 		return nil, err
 	}
 
-	productMap := make(map[int64]*productmodel.Product)
+	productMap := make(map[int64]productmodel.Product)
 	for _, pd := range products {
-		productMap[pd.ID] = &pd
+		productMap[pd.ID] = pd
 	}
 
 	return productMap, nil
 }
 
-func (c *checkoutService) validateCheckout(request *dto.ProductCheckoutReq, productDetails map[int64]*productmodel.Product) (err error) {
+func (c *checkoutService) validateCheckout(request *dto.ProductCheckoutReq, productDetails map[int64]productmodel.Product) (err error) {
 	if request.Change == nil {
 		return errs.NewErrBadRequest("empty change")
 	}
@@ -154,8 +154,8 @@ func (c *checkoutService) validateCheckout(request *dto.ProductCheckoutReq, prod
 			return errs.NewErrDataNotFound("invalid product id", productId, errs.ErrorData{})
 		}
 
-		product := productDetails[productId]
-		if product == nil {
+		product, ok := productDetails[productId]
+		if !ok {
 			return errs.NewErrDataNotFound("product is not found", productId, errs.ErrorData{})
 		}
 		totalPrice += product.Price * float64(pd.Quantity)
