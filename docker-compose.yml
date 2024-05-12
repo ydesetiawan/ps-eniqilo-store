@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 9090:8080
+    network_mode: host
     env_file: .env-docker-compose
 
 volumes:

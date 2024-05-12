@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -18,7 +19,7 @@ type MainConfig struct {
 }
 
 func (dc *MainConfig) GetDsnString() string {
-	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?%s", dc.Username, dc.Password, dc.Host, dc.Port, dc.DatabaseName, dc.Params)
+	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?%s", dc.Username, dc.Password, dc.Host, dc.Port, dc.DatabaseName, strings.Replace(dc.Params, "\"", "", -1))
 }
 
 func (mc *MainConfig) ReadConfig() error {
