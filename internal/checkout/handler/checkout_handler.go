@@ -36,7 +36,15 @@ func (h *CheckoutHandler) CheckoutProduct(ctx *app.Context) *response.WebRespons
 }
 
 func (h *CheckoutHandler) GetCheckoutHistory(ctx *app.Context) *response.WebResponse {
-	reqParams := dto.GenerateCheckoutHistoryReqParams(ctx)
+
+	reqParams, err := dto.GenerateCheckoutHistoryReqParams(ctx)
+	if err != nil {
+		return &response.WebResponse{
+			Status:  200,
+			Message: err.Error(),
+			Data:    []dto.CheckOutHistoryResp{},
+		}
+	}
 
 	results, err := h.checkoutService.GetCheckOutHistory(reqParams)
 	helper.PanicIfError(err, "error when [GetCheckoutHistory")
@@ -44,6 +52,7 @@ func (h *CheckoutHandler) GetCheckoutHistory(ctx *app.Context) *response.WebResp
 	message := "successfully get checkout history"
 	if len(results) == 0 {
 		message = "DATA NOT FOUND"
+		results = []dto.CheckOutHistoryResp{}
 	}
 
 	return &response.WebResponse{

@@ -134,3 +134,16 @@ func IdIsInteger(id string) bool {
 	var idPattern = regexp.MustCompile(`^[0-9]+$`)
 	return idPattern.MatchString(id)
 }
+
+func ValidateURL(fl validator.FieldLevel) bool {
+	url, ok := fl.Field().Interface().(string)
+	if !ok {
+		// Field is not a string
+		return false
+	}
+	// Define the regex pattern
+	pattern := `^(http|https):\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(\/\S*)?$`
+	// Match the regex pattern
+	matched, _ := regexp.MatchString(pattern, url)
+	return matched
+}

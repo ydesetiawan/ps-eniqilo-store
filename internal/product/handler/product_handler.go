@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"ps-eniqilo-store/internal/product/dto"
+	"ps-eniqilo-store/internal/product/model"
 	"ps-eniqilo-store/internal/product/service"
 	"ps-eniqilo-store/pkg/base/app"
 	"ps-eniqilo-store/pkg/helper"
@@ -29,6 +30,7 @@ func (h *ProductHandler) GetProduct(ctx *app.Context) *response.WebResponse {
 	message := "successfully get product"
 	if len(results) == 0 {
 		message = "DATA NOT FOUND"
+		results = []model.Product{}
 	}
 
 	return &response.WebResponse{
